@@ -27,7 +27,11 @@
     "tsc": "tsc",
     "start": "set debug=* && ts-node-dev --respawn --transpile-only ./src/index.ts",
     "prod": "tsc && node ./build/app.js",
+    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -n ",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
+    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
+    "seed:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -c seed -n ",
+    "seed:run": "ts-node ./node_modules/typeorm/cli.js migration:run -c seed",
+    "seed:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -c seed"
   }
 }

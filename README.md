@@ -19,7 +19,10 @@ cp ./src/config/config.example.ts ./src/config/config.ts
 yarn install
 
 # Run this migration in the first time setup
+## Create users table
 yarn run migration:run
+## Create Admin user
+yarn run seed:run
 
 # Start the server
 yarn start
