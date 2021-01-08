@@ -30,7 +30,7 @@ class AuthController {
       return
     }
 
-    // Sing JWT, valid for 1 hour
+    // Sign JWT, valid for 1 hour
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       config.jwtSecret,
