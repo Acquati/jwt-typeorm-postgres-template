@@ -20,13 +20,13 @@ export default class User {
   @IsNotEmpty()
   role: string
 
-  @Column()
-  @CreateDateColumn()
-  createdAt: Date
+  // @Column()
+  // @CreateDateColumn()
+  // createdAt: Date
 
-  @Column()
-  @UpdateDateColumn()
-  updatedAt: Date
+  // @Column()
+  // @UpdateDateColumn()
+  // updatedAt: Date
 
   @BeforeInsert()
   @BeforeUpdate()
