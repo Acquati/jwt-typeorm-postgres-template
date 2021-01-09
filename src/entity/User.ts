@@ -1,35 +1,43 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm'
-import { Length, IsNotEmpty } from 'class-validator'
+import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Length, IsNotEmpty, IsEmail, IsString } from 'class-validator'
 import bcrypt from 'bcryptjs'
 
 @Entity('users')
-@Unique(['email'])
+@Unique(['email', 'username'])
 export default class User {
   @PrimaryGeneratedColumn('uuid')
-  id: number
+  id: string
 
   @Column()
+  @IsEmail()
+  @IsNotEmpty()
   @Length(5, 254)
   email: string
 
   @Column()
-  @Length(8, 100)
+  @IsString()
+  @IsNotEmpty()
+  @Length(5, 30)
+  username: string
+
+  @Column()
+  @IsString()
+  @IsNotEmpty()
+  @Length(8, 60)
   password: string
 
   @Column()
+  @IsString()
   @IsNotEmpty()
+  @Length(1, 300)
   role: string
 
-  // @Column()
-  // @CreateDateColumn()
-  // createdAt: Date
+  @CreateDateColumn()
+  createDate: Date
 
-  // @Column()
-  // @UpdateDateColumn()
-  // updatedAt: Date
+  @UpdateDateColumn()
+  updateDate: Date
 
-  // @BeforeInsert()
-  // @BeforeUpdate()
   hashPassword() {
     this.password = bcrypt.hashSync(this.password, 8)
   }

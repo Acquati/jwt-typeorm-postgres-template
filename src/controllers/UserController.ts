@@ -8,7 +8,8 @@ class UserController {
     // Get users from database
     const userRepository = getRepository(User)
     const users = await userRepository.find({
-      select: ['id', 'email', 'role'] // We dont want to send the passwords on response
+      // We dont want to send the passwords on response
+      select: ['id', 'email', 'username', 'createDate', 'updateDate', 'role']
     })
 
     // Send the users object
@@ -25,7 +26,8 @@ class UserController {
       const user = await userRepository.findOneOrFail(
         id,
         {
-          select: ['id', 'email', 'role'] // We dont want to send the password on response
+          // We dont want to send the password on response
+          select: ['id', 'email', 'username', 'createDate', 'updateDate', 'role']
         }
       )
       response.send(user)
@@ -36,11 +38,15 @@ class UserController {
 
   static newUser = async (request: Request, response: Response) => {
     // Get parameters from the body
-    let { email, password, role } = request.body
+    let { email, username, password, role } = request.body
     let user = new User()
+    let date = new Date()
     user.email = email
+    user.username = username
     user.password = password
     user.role = role
+    user.createDate = date
+    user.updateDate = date
 
     // Validade if the parameters are ok
     const errors = await validate(user)
@@ -57,7 +63,7 @@ class UserController {
     try {
       await userRepository.save(user)
     } catch (error) {
-      response.status(409).send('Email already in use. ' + error)
+      response.status(409).send('Email or username already in use. ' + error)
       return
     }
 
@@ -70,7 +76,7 @@ class UserController {
     const id = request.params.id
 
     // Get values from the body
-    const { email, role } = request.body
+    const { email, username, role } = request.body
 
     // Try to find user on database
     const userRepository = getRepository(User)
@@ -85,7 +91,9 @@ class UserController {
 
     // Validate the new values on model
     user.email = email
+    user.username = username
     user.role = role
+    user.updateDate = new Date()
     const errors = await validate(user)
     if (errors.length > 0) {
       response.status(400).send(errors)
@@ -96,7 +104,7 @@ class UserController {
     try {
       await userRepository.save(user)
     } catch (error) {
-      response.status(409).send('Email already in use. ' + error)
+      response.status(409).send('Email or username already in use. ' + error)
       return
     }
 
