@@ -26,4 +26,7 @@ yarn seed:run
 
 # Start the server for development
 yarn dev
+
+# Run tests
+yarn test
 ```
