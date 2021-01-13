@@ -20,10 +20,10 @@ yarn install
 
 # Run this migration in the first time setup
 ## Create users table
-yarn run migration:run
+yarn migration:run
 ## Create Admin user
-yarn run seed:run
+yarn seed:run
 
-# Start the server
-yarn start
+# Start the server for development
+yarn dev
 ```

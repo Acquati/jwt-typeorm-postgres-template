@@ -13,10 +13,11 @@ const connection = {
     const connection = getConnection()
     const entities = connection.entityMetadatas
 
-    entities.forEach(async (entity) => {
+    const entityDeletionPromises = entities.map((entity) => async () => {
       const repository = connection.getRepository(entity.name)
       await repository.query(`DELETE FROM ${entity.tableName}`)
     })
+    await Promise.all(entityDeletionPromises)
   },
 }
 
