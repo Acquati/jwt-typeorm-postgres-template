@@ -3,7 +3,7 @@ import supertest from 'supertest'
 import { app } from '../../app'
 import config from '../../config/config'
 
-describe('Users Test Suite', () => {
+describe('Authentication Test Suite', () => {
   beforeAll(async () => {
     await connection.create()
   })
@@ -16,10 +16,13 @@ describe('Users Test Suite', () => {
     await connection.clear()
   })
 
-  test('Login as admin user', async (done) => {
+  test('Login as admin user.', async (done) => {
+    await connection.createTestAdmin()
+
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
+
     expect(user.status).toBe(200)
     done()
   })
