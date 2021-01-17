@@ -13,7 +13,7 @@ class UserController {
     })
 
     // Send the users object
-    response.send(users)
+    return response.send(users)
   }
 
   static getOneById = async (request: Request, response: Response) => {
@@ -30,9 +30,9 @@ class UserController {
           select: ['id', 'email', 'username', 'createDate', 'updateDate', 'role']
         }
       )
-      response.send(user)
+      return response.send(user)
     } catch (error) {
-      response.status(404).send('User not found. ' + error)
+      return response.status(404).send('User not found. ' + error)
     }
   }
 
@@ -51,8 +51,7 @@ class UserController {
     // Validade if the parameters are ok
     const errors = await validate(user)
     if (errors.length > 0) {
-      response.status(400).send(errors)
-      return
+      return response.status(400).send(errors)
     }
 
     // Hash the password, to securely store on DB
@@ -63,12 +62,11 @@ class UserController {
     try {
       await userRepository.save(user)
     } catch (error) {
-      response.status(409).send('Email or username already in use. ' + error)
-      return
+      return response.status(409).send('Email or username already in use. ' + error)
     }
 
     // If all ok, send 201 response
-    response.status(201).send('User created successfully.')
+    return response.status(201).send('User created successfully.')
   }
 
   static editUser = async (request: Request, response: Response) => {
@@ -85,8 +83,7 @@ class UserController {
       user = await userRepository.findOneOrFail(id)
     } catch (error) {
       // If not found, send a 404 response
-      response.status(404).send('User not found. ' + error)
-      return
+      return response.status(404).send('User not found. ' + error)
     }
 
     // Validate the new values on model
@@ -96,20 +93,18 @@ class UserController {
     user.updateDate = new Date()
     const errors = await validate(user)
     if (errors.length > 0) {
-      response.status(400).send(errors)
-      return
+      return response.status(400).send(errors)
     }
 
     // Try to save. If fails, the email is already in use
     try {
       await userRepository.save(user)
     } catch (error) {
-      response.status(409).send('Email or username already in use. ' + error)
-      return
+      return response.status(409).send('Email or username already in use. ' + error)
     }
 
     // After all send a 200 (OK) response
-    response.status(200).send('User edited successfully.')
+    return response.status(200).send('User edited successfully.')
   }
 
   static deleteUser = async (request: Request, response: Response) => {
@@ -121,13 +116,12 @@ class UserController {
     try {
       user = await userRepository.findOneOrFail(id)
     } catch (error) {
-      response.status(404).send('User not found. ' + error)
-      return
+      return response.status(404).send('User not found. ' + error)
     }
     userRepository.delete(id)
 
     // After all send a 200 (OK) response
-    response.status(200).send('User successfully deleted.')
+    return response.status(200).send('User successfully deleted.')
   }
 }
 

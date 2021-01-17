@@ -1,6 +1,5 @@
 import connection from '../../utils/connection'
 import supertest from 'supertest'
-import jwt from 'jsonwebtoken'
 import { app } from '../../app'
 import config from '../../config/config'
 
@@ -44,6 +43,21 @@ describe('Change Password Test Suite', () => {
       .set({ token: user.body.token })
       .send({ oldPassword: config.adminPassword + '9', newPassword: config.adminPassword + '9' })
     expect(response.status).toBe(401)
+
+    done()
+  })
+
+  test('Authenticated user can change password', async (done) => {
+    const user = await supertest(app)
+      .post('/auth/login')
+      .send({ email: config.adminEmail, password: config.adminPassword })
+    expect(user.status).toBe(200)
+
+    const response = await supertest(app)
+      .patch('/auth/change-password')
+      .set({ token: user.body.token })
+      .send({ oldPassword: config.adminPassword, newPassword: config.adminPassword + '9' })
+    expect(response.status).toBe(200)
 
     done()
   })

@@ -7,38 +7,42 @@ import config from '../config/config'
 
 class AuthController {
   static login = async (request: Request, response: Response) => {
-    // Check if email and password are set
-    let { email, password } = request.body
-    if (!(email && password)) {
-      response.status(400).send('Email and password not set.')
-      return
-    }
-
-    // Get user from database
-    const userRepository = getRepository(User)
-    let user: User
     try {
-      user = await userRepository.findOneOrFail({ where: { email } })
+      // Check if email and password are set
+      let { email, password } = request.body
+      if (!(email && password)) {
+        response.status(400).send('Email and password not set.')
+        return
+      }
+
+      // Get user from database
+      const userRepository = getRepository(User)
+      let user: User
+      try {
+        user = await userRepository.findOneOrFail({ where: { email } })
+      } catch (error) {
+        response.status(401).send('User not found. ' + error)
+        return
+      }
+
+      // Check if encrypted password match
+      if (!user.checkIfUnencryptedPasswordIsValid(password)) {
+        response.status(401).send("Password don't match.")
+        return
+      }
+
+      // Sign JWT, valid for 1 hour
+      const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        config.jwtSecret,
+        { expiresIn: '1h' }
+      )
+
+      // Send the JWT token in the response
+      return response.status(200).send({ token: token })
     } catch (error) {
-      response.status(401).send('User not found. ' + error)
-      return
+      return response.status(400).send(error)
     }
-
-    // Check if encrypted password match
-    if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-      response.status(401).send("Password don't match.")
-      return
-    }
-
-    // Sign JWT, valid for 1 hour
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      config.jwtSecret,
-      { expiresIn: '1h' }
-    )
-
-    // Send the JWT token in the response
-    return response.status(200).send({ token: token })
   }
 
   static changePassword = async (request: Request, response: Response) => {
@@ -78,9 +82,14 @@ class AuthController {
 
     // Hash the new password and save
     user.hashPassword()
-    userRepository.save(user)
 
-    response.status(200).send('Password successfully changed.')
+    try {
+      await userRepository.save(user)
+    } catch (error) {
+      return response.status(409).send(error)
+    }
+
+    return response.status(200).send('Password successfully changed.')
   }
 }
 export default AuthController
