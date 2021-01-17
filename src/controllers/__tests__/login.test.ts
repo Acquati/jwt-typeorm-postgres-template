@@ -22,6 +22,7 @@ describe('Login Test Suite', () => {
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
     expect(user.status).toBe(200)
+
     done()
   })
 
@@ -30,6 +31,7 @@ describe('Login Test Suite', () => {
       .post('/auth/login')
       .send({ email: '', password: '' })
     expect(user.status).toBe(400)
+
     done()
   })
 
@@ -38,6 +40,7 @@ describe('Login Test Suite', () => {
       .post('/auth/login')
       .send({ email: config.adminEmail + 'x', password: config.adminPassword })
     expect(user.status).toBe(401)
+
     done()
   })
 
@@ -46,6 +49,7 @@ describe('Login Test Suite', () => {
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword + 'x' })
     expect(user.status).toBe(401)
+
     done()
   })
 })

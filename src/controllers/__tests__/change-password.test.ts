@@ -18,9 +18,17 @@ describe('Change Password Test Suite', () => {
   })
 
   test('Old password and new password not set.', async (done) => {
-    await supertest(app)
-      .post('/auth/change-password')
-      .send({ oldPassword: '', newPassword: '' })
-      .expect(400)
+    const user = await supertest(app)
+      .post('/auth/login')
+      .send({ email: config.adminEmail, password: config.adminPassword })
+    expect(user.status).toBe(200)
+
+    const response = await supertest(app)
+      .patch('/auth/change-password')
+      .set({ token: user.body.token })
+      .send()
+    expect(response.status).toBe(400)
+
+    done()
   })
 })

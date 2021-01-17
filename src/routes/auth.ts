@@ -11,7 +11,7 @@ router.post(
 )
 
 //Change my password
-router.post(
+router.patch(
   '/change-password',
   [checkJwt],
   AuthController.changePassword

@@ -37,8 +37,10 @@ class AuthController {
       { expiresIn: '1h' }
     )
 
-    // Send the jwt in the response
-    response.send(token)
+    // Send the JWT token in the response
+    return response.status(200).json({
+      token,
+    })
   }
 
   static changePassword = async (request: Request, response: Response) => {
