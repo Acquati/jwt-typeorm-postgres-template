@@ -9,6 +9,7 @@ describe('Login Test Suite', () => {
   })
 
   afterAll(async () => {
+    await connection.clear()
     await connection.close()
   })
 

@@ -9,6 +9,7 @@ describe('Change Password Test Suite', () => {
   })
 
   afterAll(async () => {
+    await connection.clear()
     await connection.close()
   })
 
