@@ -14,50 +14,37 @@ describe('Login Test Suite', () => {
 
   beforeEach(async () => {
     await connection.clear()
+    await connection.createTestAdmin()
   })
 
   test('Login as admin user.', async (done) => {
-    await connection.createTestAdmin()
-
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
-
     expect(user.status).toBe(200)
     done()
   })
 
   test('Email and password not set.', async (done) => {
-    await connection.createTestAdmin()
-
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: '', password: '' })
-
-    console.log(user)
-
     expect(user.status).toBe(400)
     done()
   })
 
   test('User not found.', async (done) => {
-    await connection.createTestAdmin()
-
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail + 'x', password: config.adminPassword })
-
     expect(user.status).toBe(401)
     done()
   })
 
   test("Password don't match.", async (done) => {
-    await connection.createTestAdmin()
-
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword + 'x' })
-
     expect(user.status).toBe(401)
     done()
   })

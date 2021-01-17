@@ -17,12 +17,11 @@ const connection = {
 
     entities.forEach(async (entity) => {
       const repository = connection.getRepository(entity.name)
-      await repository.query(`DELETE FROM ${entity.tableName}`)
+      await repository.delete(() => '')
     })
   },
 
   async createTestAdmin() {
-    // await getConnection()
     let user = new User()
     let date = new Date()
 

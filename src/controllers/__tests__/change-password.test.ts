@@ -14,14 +14,13 @@ describe('Change Password Test Suite', () => {
 
   beforeEach(async () => {
     await connection.clear()
+    await connection.createTestAdmin()
   })
 
   test('Old password and new password not set.', async (done) => {
-    await connection.createTestAdmin()
-
     await supertest(app)
-      .post('/change-password')
+      .post('/auth/change-password')
       .send({ oldPassword: '', newPassword: '' })
-      .expect(400, done)
+      .expect(400)
   })
 })
