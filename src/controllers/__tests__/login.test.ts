@@ -17,15 +17,6 @@ describe('Login Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('Login as admin user.', async (done) => {
-    const user = await supertest(app)
-      .post('/auth/login')
-      .send({ email: config.adminEmail, password: config.adminPassword })
-    expect(user.status).toBe(200)
-
-    done()
-  })
-
   test('Email and password not set.', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
@@ -49,6 +40,15 @@ describe('Login Test Suite', () => {
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword + 'x' })
     expect(user.status).toBe(401)
+
+    done()
+  })
+
+  test('Login as admin user.', async (done) => {
+    const user = await supertest(app)
+      .post('/auth/login')
+      .send({ email: config.adminEmail, password: config.adminPassword })
+    expect(user.status).toBe(200)
 
     done()
   })
