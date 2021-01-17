@@ -34,6 +34,8 @@ describe('Login Test Suite', () => {
       .post('/auth/login')
       .send({ email: '', password: '' })
 
+    console.log(user)
+
     expect(user.status).toBe(400)
     done()
   })
