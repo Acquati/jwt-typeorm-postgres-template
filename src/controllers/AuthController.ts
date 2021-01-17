@@ -38,7 +38,7 @@ class AuthController {
     )
 
     // Send the JWT token in the response
-    return response.status(200).send(token)
+    return response.status(200).send({ token: token })
   }
 
   static changePassword = async (request: Request, response: Response) => {
@@ -64,7 +64,7 @@ class AuthController {
 
     // Check if old password matchs
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      response.status(401).send("Old password and new password don't match.")
+      response.status(401).send("Old password don't match.")
       return
     }
 

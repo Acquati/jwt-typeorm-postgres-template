@@ -26,41 +26,25 @@ describe('Change Password Test Suite', () => {
 
     const response = await supertest(app)
       .patch('/auth/change-password')
+      .set({ token: user.body.token })
       .send()
     expect(response.status).toBe(400)
 
     done()
   })
 
-  test('User not found.', async (done) => {
+  test("Old password don't match.", async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
     expect(user.status).toBe(200)
 
-    // const jwtPayload = jwt.verify(user.body.token, config.jwtSecret)
-    // console.log(jwtPayload)
-
     const response = await supertest(app)
       .patch('/auth/change-password')
-      .send({ oldPassword: config.adminPassword, newPassword: config.adminPassword + '9' })
-    expect(response.status).toBe(200)
+      .set({ token: user.body.token })
+      .send({ oldPassword: config.adminPassword + '9', newPassword: config.adminPassword + '9' })
+    expect(response.status).toBe(401)
 
     done()
   })
-
-  // test('Authenticated user change password.', async (done) => {
-  //   const user = await supertest(app)
-  //     .post('/auth/login')
-  //     .send({ email: config.adminEmail, password: config.adminPassword })
-  //   expect(user.status).toBe(200)
-
-  //   const response = await supertest(app)
-  //     .patch('/auth/change-password')
-  //     .set({ token: user.body.token })
-  //     .send({ oldPassword: config.adminPassword, newPassword: config.adminPassword + '9' })
-  //   expect(response.status).toBe(200)
-
-  //   done()
-  // })
 })
