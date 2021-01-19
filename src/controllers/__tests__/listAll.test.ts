@@ -1,5 +1,5 @@
-import connection from '../../utils/connection'
 import supertest from 'supertest'
+import connection from '../../utils/connection'
 import { app } from '../../app'
 import config from '../../config/config'
 
@@ -25,10 +25,10 @@ describe('List All Users Test Suite', () => {
     expect(user.status).toBe(200)
 
     const response = await supertest(app)
-      .patch('/auth/change-password')
+      .get('/user')
       .set({ token: user.body.token })
       .send()
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(200)
 
     done()
   })

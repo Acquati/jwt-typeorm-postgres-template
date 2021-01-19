@@ -95,8 +95,8 @@ export default class UserController {
 
   static deleteUser = async (request: Request, response: Response) => {
     const userRepository = getRepository(User)
-    const id = request.params.id
     let user: User
+    const id = request.params.id
 
     try {
       user = await userRepository.findOneOrFail(id)
