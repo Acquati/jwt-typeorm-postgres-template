@@ -19,7 +19,7 @@ describe('Get One User By Id Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('User not found.', async (done) => {
+  test('Invalid input syntax for UUID.', async (done) => {
     let jwtPayload: any
 
     const user = await supertest(app)
@@ -34,7 +34,7 @@ describe('Get One User By Id Test Suite', () => {
       .get('/user/' + userId + 'x')
       .set({ token: user.body.token })
       .send()
-    expect(response.status).toBe(404)
+    expect(response.status).toBe(400)
 
     done()
   })

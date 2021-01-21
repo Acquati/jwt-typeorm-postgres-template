@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
-import { validate } from 'class-validator'
+import { validate, isUUID } from 'class-validator'
 import User from '../entity/User'
 
 export default class UserController {
@@ -20,6 +20,10 @@ export default class UserController {
   static getOneById = async (request: Request, response: Response) => {
     const userRepository = getRepository(User)
     const id = request.params.id
+
+    if (!isUUID(id)) {
+      return response.status(400).json({ message: 'Invalid input syntax for UUID.' })
+    }
 
     try {
       const user = await userRepository.findOneOrFail(
@@ -64,9 +68,13 @@ export default class UserController {
 
   static editUser = async (request: Request, response: Response) => {
     const userRepository = getRepository(User)
+    let user: User
     const id = request.params.id
     const { email, username, role } = request.body
-    let user: User
+
+    if (!isUUID(id)) {
+      return response.status(400).json({ message: 'Invalid input syntax for UUID.' })
+    }
 
     try {
       user = await userRepository.findOneOrFail(id)
@@ -97,6 +105,10 @@ export default class UserController {
     const userRepository = getRepository(User)
     let user: User
     const id = request.params.id
+
+    if (!isUUID(id)) {
+      return response.status(400).json({ message: 'Invalid input syntax for UUID.' })
+    }
 
     try {
       user = await userRepository.findOneOrFail(id)
