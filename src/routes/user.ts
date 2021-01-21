@@ -23,7 +23,7 @@ router.get(
 router.post(
   '/',
   [checkJwt, checkRole(['ADMIN'])],
-  UserController.newUser
+  UserController.createUser
 )
 
 //Edit one user

@@ -38,7 +38,7 @@ export default class UserController {
     }
   }
 
-  static newUser = async (request: Request, response: Response) => {
+  static createUser = async (request: Request, response: Response) => {
     const userRepository = getRepository(User)
     const { email, username, password, role } = request.body
     let user = new User()
@@ -103,7 +103,6 @@ export default class UserController {
 
   static deleteUser = async (request: Request, response: Response) => {
     const userRepository = getRepository(User)
-    let user: User
     const id = request.params.id
 
     if (!isUUID(id)) {
@@ -111,7 +110,7 @@ export default class UserController {
     }
 
     try {
-      user = await userRepository.findOneOrFail(id)
+      await userRepository.findOneOrFail(id)
     } catch (error) {
       return response.status(404).json({ message: 'User not found. ' + error })
     }

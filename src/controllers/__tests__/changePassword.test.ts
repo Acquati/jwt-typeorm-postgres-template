@@ -3,7 +3,7 @@ import supertest from 'supertest'
 import { app } from '../../app'
 import config from '../../config/config'
 
-describe('Change Password Test Suite', () => {
+describe('Change User Password Test Suite', () => {
   beforeAll(async () => {
     await connection.create()
   })

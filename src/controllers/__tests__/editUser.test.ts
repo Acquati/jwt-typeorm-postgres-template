@@ -1,10 +1,10 @@
 import supertest from 'supertest'
-import jwt from 'jsonwebtoken'
 import connection from '../../utils/connection'
+import jwt from 'jsonwebtoken'
 import { app } from '../../app'
 import config from '../../config/config'
 
-describe('Create User Test Suite', () => {
+describe('Edit User Test Suite', () => {
   beforeAll(async () => {
     await connection.create()
   })
@@ -19,22 +19,25 @@ describe('Create User Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('Create User as Admin', async (done) => {
+  test('Edit User As Admin Test Suite', async (done) => {
+    let jwtPayload: any
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
     expect(user.status).toBe(200)
 
+    jwtPayload = jwt.verify(user.body.token, config.jwtSecret)
+    const { userId } = jwtPayload
+
     const response = await supertest(app)
-      .post('/user')
+      .patch('/user/' + userId)
       .set({ token: user.body.token })
       .send({
-        email: "test1@test.com",
-        username: "test1",
-        password: "12345678",
-        role: "ADMIN"
+        email: 'test2@test.com',
+        username: 'test2',
+        role: 'ADMIN'
       })
-    expect(response.status).toBe(201)
+    expect(response.status).toBe(200)
 
     done()
   })

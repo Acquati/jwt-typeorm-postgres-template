@@ -3,7 +3,7 @@ import supertest from 'supertest'
 import { app } from '../../app'
 import config from '../../config/config'
 
-describe('Login Test Suite', () => {
+describe('Login User Test Suite', () => {
   beforeAll(async () => {
     await connection.create()
   })
