@@ -13,7 +13,7 @@ export default class UserController {
       })
       return response.send(users)
     } catch (error) {
-      return response.status(404).json({ message: 'Users not found. ' + error })
+      return response.status(404).json({ message: 'No user found. ' + error })
     }
   }
 
