@@ -18,7 +18,7 @@ describe('Create User Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('Create User as Admin', async (done) => {
+  test('The administrator can create a new user.', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
