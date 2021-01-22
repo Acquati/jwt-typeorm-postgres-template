@@ -34,7 +34,7 @@ export default class UserController {
       )
       return response.send(user)
     } catch (error) {
-      return response.status(404).json({ message: 'User not found. ' + error })
+      return response.status(404).json({ message: 'No user found. ' + error })
     }
   }
 
@@ -79,7 +79,7 @@ export default class UserController {
     try {
       user = await userRepository.findOneOrFail(id)
     } catch (error) {
-      return response.status(404).json({ message: 'User not found. ' + error })
+      return response.status(404).json({ message: 'No user found. ' + error })
     }
 
     user.email = email
@@ -112,7 +112,7 @@ export default class UserController {
     try {
       await userRepository.findOneOrFail(id)
     } catch (error) {
-      return response.status(404).json({ message: 'User not found. ' + error })
+      return response.status(404).json({ message: 'No user found. ' + error })
     }
 
     try {

@@ -19,7 +19,7 @@ describe('Delete User Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('Delete user.', async (done) => {
+  test('The administrator can delete a user.', async (done) => {
     let jwtPayload: any
 
     const adminAuth = await supertest(app)

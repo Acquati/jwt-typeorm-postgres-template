@@ -18,7 +18,7 @@ describe('Login User Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('Email and password not set.', async (done) => {
+  test('Email and password were not set.', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: '', password: '' })
@@ -27,7 +27,7 @@ describe('Login User Test Suite', () => {
     done()
   })
 
-  test('User not found.', async (done) => {
+  test('No user found with this email', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail + 'x', password: config.adminPassword })
@@ -36,7 +36,7 @@ describe('Login User Test Suite', () => {
     done()
   })
 
-  test("Password don't match.", async (done) => {
+  test('The password does not match.', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword + 'x' })
@@ -45,7 +45,7 @@ describe('Login User Test Suite', () => {
     done()
   })
 
-  test('Login as admin user.', async (done) => {
+  test('The administrator can log in.', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })

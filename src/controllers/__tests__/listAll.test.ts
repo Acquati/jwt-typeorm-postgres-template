@@ -18,7 +18,7 @@ describe('List All Users Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('List all users.', async (done) => {
+  test('The administrator can request all users data.', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })

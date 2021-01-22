@@ -12,7 +12,7 @@ export default class AuthController {
     let { email, password } = request.body
 
     if (!(email && password)) {
-      return response.status(400).json({ message: 'Email and password not set.' })
+      return response.status(400).json({ message: 'Email and password have not been set.' })
     }
 
     try {
@@ -47,11 +47,11 @@ export default class AuthController {
     try {
       user = await userRepository.findOneOrFail(id)
     } catch (error) {
-      return response.status(401).json({ message: 'User not found. ' + error })
+      return response.status(401).json({ message: 'No user found. ' + error })
     }
 
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      return response.status(401).json({ message: "Old password don't match." })
+      return response.status(401).json({ message: 'The current password does not match the old password set.' })
     }
 
     user.password = newPassword

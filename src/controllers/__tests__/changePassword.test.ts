@@ -18,7 +18,7 @@ describe('Change User Password Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('The old password and the new password have not been sent.', async (done) => {
+  test('The old password and the new password have not been set.', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
@@ -33,7 +33,7 @@ describe('Change User Password Test Suite', () => {
     done()
   })
 
-  test('The current password does not match the old password sent.', async (done) => {
+  test('The current password does not match the old password set.', async (done) => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })

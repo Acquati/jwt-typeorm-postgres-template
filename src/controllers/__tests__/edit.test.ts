@@ -19,7 +19,7 @@ describe('Edit User Test Suite', () => {
     await connection.createTestAdmin()
   })
 
-  test('Edit User As Admin Test Suite', async (done) => {
+  test('The administrator can edit a user.', async (done) => {
     let jwtPayload: any
     const user = await supertest(app)
       .post('/auth/login')

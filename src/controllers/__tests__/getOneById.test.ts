@@ -39,7 +39,7 @@ describe('Get One User By Id Test Suite', () => {
     done()
   })
 
-  test('Show admin user.', async (done) => {
+  test('The administrator can request user data.', async (done) => {
     let jwtPayload: any
 
     const user = await supertest(app)
