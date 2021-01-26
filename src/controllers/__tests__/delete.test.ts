@@ -20,14 +20,12 @@ describe('Delete User Test Suite', () => {
   })
 
   test('The administrator can delete a user.', async (done) => {
-    let jwtPayload: any
-
     const adminAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
     expect(adminAuth.status).toBe(200)
 
-    const user = await supertest(app)
+    const createUser = await supertest(app)
       .post('/user')
       .set({ token: adminAuth.body.token })
       .send({
@@ -36,14 +34,14 @@ describe('Delete User Test Suite', () => {
         password: '12345678',
         role: 'ADMIN'
       })
-    expect(user.status).toBe(201)
+    expect(createUser.status).toBe(201)
 
     const userAuth = await supertest(app)
       .post('/auth/login')
-      .send({ email: config.adminEmail, password: config.adminPassword })
+      .send({ email: 'test1@test.com', password: '12345678' })
     expect(userAuth.status).toBe(200)
 
-    jwtPayload = jwt.verify(userAuth.body.token, config.jwtSecret)
+    let jwtPayload: any = jwt.verify(userAuth.body.token, config.jwtSecret)
     const { userId } = jwtPayload
 
     const response = await supertest(app)

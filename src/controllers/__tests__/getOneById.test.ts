@@ -20,19 +20,17 @@ describe('Get One User By Id Test Suite', () => {
   })
 
   test('Invalid input syntax for UUID.', async (done) => {
-    let jwtPayload: any
-
-    const user = await supertest(app)
+    const adminAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
-    expect(user.status).toBe(200)
+    expect(adminAuth.status).toBe(200)
 
-    jwtPayload = jwt.verify(user.body.token, config.jwtSecret)
+    let jwtPayload: any = jwt.verify(adminAuth.body.token, config.jwtSecret)
     const { userId } = jwtPayload
 
     const response = await supertest(app)
       .get('/user/' + userId + 'x')
-      .set({ token: user.body.token })
+      .set({ token: adminAuth.body.token })
       .send()
     expect(response.status).toBe(400)
 
@@ -40,14 +38,12 @@ describe('Get One User By Id Test Suite', () => {
   })
 
   test('No user found.', async (done) => {
-    let jwtPayload: any
-
     const adminAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
     expect(adminAuth.status).toBe(200)
 
-    const user = await supertest(app)
+    const createUser = await supertest(app)
       .post('/user')
       .set({ token: adminAuth.body.token })
       .send({
@@ -56,14 +52,14 @@ describe('Get One User By Id Test Suite', () => {
         password: '12345678',
         role: 'ADMIN'
       })
-    expect(user.status).toBe(201)
+    expect(createUser.status).toBe(201)
 
     const userAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: 'test1@test.com', password: '12345678' })
     expect(userAuth.status).toBe(200)
 
-    jwtPayload = jwt.verify(userAuth.body.token, config.jwtSecret)
+    let jwtPayload: any = jwt.verify(userAuth.body.token, config.jwtSecret)
     const { userId } = jwtPayload
 
     const deleteUser = await supertest(app)
@@ -82,19 +78,17 @@ describe('Get One User By Id Test Suite', () => {
   })
 
   test('The administrator can request user data.', async (done) => {
-    let jwtPayload: any
-
-    const user = await supertest(app)
+    const userAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
-    expect(user.status).toBe(200)
+    expect(userAuth.status).toBe(200)
 
-    jwtPayload = jwt.verify(user.body.token, config.jwtSecret)
+    let jwtPayload: any = jwt.verify(userAuth.body.token, config.jwtSecret)
     const { userId } = jwtPayload
 
     const response = await supertest(app)
       .get('/user/' + userId)
-      .set({ token: user.body.token })
+      .set({ token: userAuth.body.token })
       .send()
     expect(response.status).toBe(200)
 

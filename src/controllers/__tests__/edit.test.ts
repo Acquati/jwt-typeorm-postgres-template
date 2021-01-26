@@ -20,21 +20,20 @@ describe('Edit User Test Suite', () => {
   })
 
   test('The administrator can edit a user.', async (done) => {
-    let jwtPayload: any
-    const user = await supertest(app)
+    const adminAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
-    expect(user.status).toBe(200)
+    expect(adminAuth.status).toBe(200)
 
-    jwtPayload = jwt.verify(user.body.token, config.jwtSecret)
+    let jwtPayload: any = jwt.verify(adminAuth.body.token, config.jwtSecret)
     const { userId } = jwtPayload
 
     const response = await supertest(app)
       .patch('/user/' + userId)
-      .set({ token: user.body.token })
+      .set({ token: adminAuth.body.token })
       .send({
-        email: 'test2@test.com',
-        username: 'test2',
+        email: 'test1@test.com',
+        username: 'test1',
         role: 'ADMIN'
       })
     expect(response.status).toBe(200)

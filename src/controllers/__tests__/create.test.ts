@@ -19,14 +19,14 @@ describe('Create User Test Suite', () => {
   })
 
   test('The administrator can create a new user.', async (done) => {
-    const user = await supertest(app)
+    const adminAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
-    expect(user.status).toBe(200)
+    expect(adminAuth.status).toBe(200)
 
     const response = await supertest(app)
       .post('/user')
-      .set({ token: user.body.token })
+      .set({ token: adminAuth.body.token })
       .send({
         email: "test1@test.com",
         username: "test1",

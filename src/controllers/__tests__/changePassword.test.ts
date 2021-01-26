@@ -19,14 +19,14 @@ describe('Change User Password Test Suite', () => {
   })
 
   test('The old password and the new password have not been set.', async (done) => {
-    const user = await supertest(app)
+    const adminAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
-    expect(user.status).toBe(200)
+    expect(adminAuth.status).toBe(200)
 
     const response = await supertest(app)
       .patch('/auth/change-password')
-      .set({ token: user.body.token })
+      .set({ token: adminAuth.body.token })
       .send()
     expect(response.status).toBe(400)
 
@@ -34,30 +34,30 @@ describe('Change User Password Test Suite', () => {
   })
 
   test('The current password does not match the old password set.', async (done) => {
-    const user = await supertest(app)
+    const adminAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
-    expect(user.status).toBe(200)
+    expect(adminAuth.status).toBe(200)
 
     const response = await supertest(app)
       .patch('/auth/change-password')
-      .set({ token: user.body.token })
-      .send({ oldPassword: config.adminPassword + '9', newPassword: config.adminPassword + '9' })
+      .set({ token: adminAuth.body.token })
+      .send({ oldPassword: config.adminPassword + 'x', newPassword: config.adminPassword + 'x' })
     expect(response.status).toBe(401)
 
     done()
   })
 
   test('The authenticated user can change his password.', async (done) => {
-    const user = await supertest(app)
+    const adminAuth = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail, password: config.adminPassword })
-    expect(user.status).toBe(200)
+    expect(adminAuth.status).toBe(200)
 
     const response = await supertest(app)
       .patch('/auth/change-password')
-      .set({ token: user.body.token })
-      .send({ oldPassword: config.adminPassword, newPassword: config.adminPassword + '9' })
+      .set({ token: adminAuth.body.token })
+      .send({ oldPassword: config.adminPassword, newPassword: config.adminPassword + 'x' })
     expect(response.status).toBe(200)
 
     done()

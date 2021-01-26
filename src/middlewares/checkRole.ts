@@ -11,7 +11,7 @@ export const checkRole = (roles: Array<string>) => {
     try {
       user = await userRepository.findOneOrFail(id)
     } catch (error) {
-      return response.status(401).json({ message: 'No user found. ' + error })
+      return response.status(404).json({ message: 'No user found. ' + error })
     }
 
     // Check if array of authorized roles includes the user's role
