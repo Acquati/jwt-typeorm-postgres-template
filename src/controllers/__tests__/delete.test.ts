@@ -31,10 +31,10 @@ describe('Delete User Test Suite', () => {
       .post('/user')
       .set({ token: adminAuth.body.token })
       .send({
-        email: "test1@test.com",
-        username: "test1",
-        password: "12345678",
-        role: "ADMIN"
+        email: 'test1@test.com',
+        username: 'test1',
+        password: '12345678',
+        role: 'ADMIN'
       })
     expect(user.status).toBe(201)
 

@@ -11,7 +11,7 @@ export default class UserController {
       const users = await userRepository.find({
         select: ['id', 'email', 'username', 'role', 'createDate', 'updateDate']
       })
-      return response.send(users)
+      return response.status(200).send(users)
     } catch (error) {
       return response.status(404).json({ message: 'No user found. ' + error })
     }

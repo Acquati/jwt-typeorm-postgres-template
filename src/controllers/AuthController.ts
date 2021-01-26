@@ -18,11 +18,11 @@ export default class AuthController {
     try {
       user = await userRepository.findOneOrFail({ where: { email } })
     } catch (error) {
-      return response.status(401).json({ message: 'User not found. ' + error })
+      return response.status(404).json({ message: 'No user found. ' + error })
     }
 
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-      return response.status(401).json({ message: "Password don't match." })
+      return response.status(401).json({ message: 'The current password does not match the password set.' })
     }
 
     const token = jwt.sign(
@@ -47,7 +47,7 @@ export default class AuthController {
     try {
       user = await userRepository.findOneOrFail(id)
     } catch (error) {
-      return response.status(401).json({ message: 'No user found. ' + error })
+      return response.status(404).json({ message: 'No user found. ' + error })
     }
 
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {

@@ -31,7 +31,7 @@ describe('Login User Test Suite', () => {
     const user = await supertest(app)
       .post('/auth/login')
       .send({ email: config.adminEmail + 'x', password: config.adminPassword })
-    expect(user.status).toBe(401)
+    expect(user.status).toBe(404)
 
     done()
   })
