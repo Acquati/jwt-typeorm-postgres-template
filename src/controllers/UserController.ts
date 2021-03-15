@@ -118,7 +118,7 @@ export default class UserController {
     try {
       await userRepository.delete(id)
     } catch (error) {
-      return response.status(400).json({ message: + error })
+      return response.status(400).json({ message: error })
     }
 
     return response.status(200).json({ message: 'User successfully deleted.' })
